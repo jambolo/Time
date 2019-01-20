@@ -1,50 +1,14 @@
-/** @file *//********************************************************************************************************
-
-                                                      Timer.cpp
-
-						                    Copyright 2003, John J. Bolton
-	--------------------------------------------------------------------------------------------------------------
-
-	$Header: //depot/Libraries/Time/Timer.cpp#5 $
-
-	$NoKeywords: $
-
- ********************************************************************************************************************/
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-
 #include "Timer.h"
 
 #include "Clock.h"
 
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
-
 Timer::Timer()
 {
-	// Start the timer immediately. This does not create a problem if it is explicitly started again later. It
-	// prevents problems that would be caused by calling Stop or Resume without having called Start first.
+    // Start the timer immediately. This does not create a problem if it is explicitly started again later. It
+    // prevents problems that would be caused by calling Stop or Resume without having called Start first.
 
-	Start();
+    Start();
 }
-
-
-
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
-
-Timer::~Timer()
-{
-}
-
-
-
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
 
 //! @return		The start time
 //!
@@ -52,17 +16,11 @@ Timer::~Timer()
 
 __int64 Timer::Start()
 {
-	m_StartTime = m_StopTime = Clock::Instance().GetTime();
-	m_Running = true;
+    m_StartTime = m_StopTime = Clock::Instance().GetTime();
+    m_Running   = true;
 
-	return m_StartTime;
+    return m_StartTime;
 }
-
-
-
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
 
 //! @return		The elapsed time
 //!
@@ -70,20 +28,14 @@ __int64 Timer::Start()
 
 __int64 Timer::Stop()
 {
-	if ( m_Running )
-	{
-		m_StopTime = Clock::Instance().GetTime();
-		m_Running = false;
-	}
+    if (m_Running)
+    {
+        m_StopTime = Clock::Instance().GetTime();
+        m_Running  = false;
+    }
 
-	return Elapsed();
+    return Elapsed();
 }
-
-
-
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
 
 //! This function continues timing again, but the time elapsed between the previous stop and the current time is
 //! not included.
@@ -94,22 +46,16 @@ __int64 Timer::Stop()
 
 __int64 Timer::Resume()
 {
-	__int64 const	currentTime	= Clock::Instance().GetTime();
+    __int64 const currentTime = Clock::Instance().GetTime();
 
-	if ( !m_Running )
-	{
-		m_StartTime += currentTime - m_StopTime;
-		m_Running = true;
-	}
+    if (!m_Running)
+    {
+        m_StartTime += currentTime - m_StopTime;
+        m_Running    = true;
+    }
 
-	return currentTime;
+    return currentTime;
 }
-
-
-
-/********************************************************************************************************************/
-/*																													*/
-/********************************************************************************************************************/
 
 //! If the timer is running, the time since the timer was started is returned. Otherwise, the elapsed time between
 //! Start and Stop is returned.
@@ -118,17 +64,12 @@ __int64 Timer::Resume()
 
 __int64 Timer::Elapsed()
 {
-	__int64			elapsedTime;
+    __int64 elapsedTime;
 
-	if ( m_Running )
-	{
-		elapsedTime = Clock::Instance().ElapsedSince( m_StartTime );
-	}
-	else
-	{
-		elapsedTime = m_StopTime - m_StartTime;
-	}
+    if (m_Running)
+        elapsedTime = Clock::Instance().ElapsedSince(m_StartTime);
+    else
+        elapsedTime = m_StopTime - m_StartTime;
 
-	return elapsedTime;
+    return elapsedTime;
 }
-
